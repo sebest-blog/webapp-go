@@ -1,0 +1,20 @@
+sudo: required
+
+services:
+  - docker
+
+language: go
+
+go:
+  - '1.5'
+
+env:
+  global:
+    - secure: "arn2hZFp0ub1NisPTYAUJpMSGxhqhLrROyPxTbASwf8VkT5LOfq1xmlBPSaBgmXZXDTMsttTV7kiafFVDKx3yi5HpvXz5cQXVA9ZDKGaqVRpELIfQmiB/HwEHcNzz9dEo5zSqbFS4yxbw7qJffsqn0EhIC6Z2/IYMKLdDaIur8HxvfAK2saz38sJvFqDUsMHiYMrBLOhp20qP/Dk9S6JFn8EHr+XWgskp+pakGjoiUBoYXuzeD/T+lLN+kPSdGV25qV2Bl8LXTO0+rXVmnZNS7oVtV1pXZhLkN2QznAUmAR6CsansnYaLd/u7leCywX2oQWMtj6u+5adklcGMT6KWQhfxBOXyH7085Nbs3E0xo1pikG3K6KRmjWQjwYAiC3gg3PrJJGA6n6UmuzLrZhpWmQbimvkcyVtNO/jzoxICsFxaOpvBAsAV+qmU3U62MG4O4GoDYuxCI6uoU5K8XOETRxP72VN3oP7kYPdGttaI46r9q1wPLET9EEv2UJEt3HSouaIVbRr496x+sjqaXRkwSCqtMdNcj5zRAWh3Rrnpo98of+58Qw6Fif04dKDyWJ2ZryyUx2dr1pwLk+DH75utlR8rq8wTewfmbmknGjJmoAJnr2HyUnqmF0kmuOCayCNh8YqWAigkV6KUywf+NR11mBTeW5aSztIsP+HaZ8nTXA=" # DOCKER_USER
+    - secure: "BThcaerkHfylzmd9+Johk3YozKpAW9ICCBD+Fn1ZUniTNgZ0T3o0mQZePLw5uv6vQn8c+bCTDomVZ6vVCI6/7SqKHM62aazhleEwZijjSiMEeA7I0TUC4ewjaO9S66R0BpC9+zq9BOVZRYfTSm0UHMKaSv/+snMQLWg0sdqroaSHDi8kGVv7cTe5p+6pcIW1s6inMCJNNijMfp1r3z59XdkjYwVZ3CCF0jElKcX8za6xmmQZLtd4u+gCPtlRd032zSKFgZ/mFFGBjwRzXfm6XPD3q08QEbjvvZgnwhzqNS1vMWXPNWyYzuznMRjnUAHaeaCkTo96wWuHeBO2h3FRrotKWl/rYYqrp/T9Gos/XHl7f9xzC3SpjVr94qUhw8Czlw4O50DGlXaKfKSETCDZYSqBAhA1SMbYg4Ejf4L0ldOKPiM5KPnUpHGeyGDoDlAaTUuAWg9C/KxVeyn7fncjUbyAkWkmEI0XKDlx68/1LKG9GKbJmNVoZn2uvF9pqG/2ZLCzwurY6N/Ix7Boxn8TKBVYXTutvNHYl4apSn3nvoKyhD7NvHafDzDkVUGq6kQNJIFN7jEkvwZIIXWG8hA82wTWiLWFdfxxF9T/XUsYUckx1grsroMH56y7E8qdzGH7ldAyv1EN70tohfxQsVgHxAdz4l19urNMBu1IdgoPLOM=" # DOCKER_PASS
+    - COMMIT=${TRAVIS_COMMIT::8}
+
+after_success:
+  - curl -O -L https://github.com/grammarly/rocker/releases/download/0.2.2/rocker-0.2.2_linux_amd64.tar.gz
+  - tar xvfz rocker-0.2.2_linux_amd64.tar.gz
+  - ./rocker build -var TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER -var COMMIT=$COMMIT --push --auth $DOCKER_USER:$DOCKER_PASS

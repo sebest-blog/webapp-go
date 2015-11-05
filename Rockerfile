@@ -1,0 +1,21 @@
+################################################################################
+# Build
+FROM golang:1.5.1
+
+MOUNT .:/go
+WORKDIR /go
+ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+RUN go build -a -installsuffix cgo -o /webapp main.go
+RUN tar cfz export.tar.gz /webapp
+
+################################################################################
+# Run image
+FROM scratch
+
+ADD export.tar.gz /
+EXPOSE 8000
+CMD ["/webapp"]
+
+PUSH sebestblog/webapp-go:latest
+PUSH sebestblog/webapp-go:{{ .TRAVIS_BUILD_NUMBER }}
+PUSH sebestblog/webapp-go:{{ .COMMIT }}
