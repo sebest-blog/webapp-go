@@ -15,6 +15,6 @@ env:
     - COMMIT=${TRAVIS_COMMIT::8}
 
 after_success:
-  - curl -O -L https://github.com/grammarly/rocker/releases/download/0.2.2/rocker-0.2.2_linux_amd64.tar.gz
-  - tar xvfz rocker-0.2.2_linux_amd64.tar.gz
+  - curl -O -L https://github.com/grammarly/rocker/releases/download/1.0.1/rocker-1.0.1_linux_amd64.tar.gz
+  - tar xvfz rocker-1.0.1_linux_amd64.tar.gz
   - ./rocker build -var TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER -var COMMIT=$COMMIT --push --auth $DOCKER_USER:$DOCKER_PASS
