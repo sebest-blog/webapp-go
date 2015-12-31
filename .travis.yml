@@ -14,7 +14,13 @@ env:
     - secure: "BThcaerkHfylzmd9+Johk3YozKpAW9ICCBD+Fn1ZUniTNgZ0T3o0mQZePLw5uv6vQn8c+bCTDomVZ6vVCI6/7SqKHM62aazhleEwZijjSiMEeA7I0TUC4ewjaO9S66R0BpC9+zq9BOVZRYfTSm0UHMKaSv/+snMQLWg0sdqroaSHDi8kGVv7cTe5p+6pcIW1s6inMCJNNijMfp1r3z59XdkjYwVZ3CCF0jElKcX8za6xmmQZLtd4u+gCPtlRd032zSKFgZ/mFFGBjwRzXfm6XPD3q08QEbjvvZgnwhzqNS1vMWXPNWyYzuznMRjnUAHaeaCkTo96wWuHeBO2h3FRrotKWl/rYYqrp/T9Gos/XHl7f9xzC3SpjVr94qUhw8Czlw4O50DGlXaKfKSETCDZYSqBAhA1SMbYg4Ejf4L0ldOKPiM5KPnUpHGeyGDoDlAaTUuAWg9C/KxVeyn7fncjUbyAkWkmEI0XKDlx68/1LKG9GKbJmNVoZn2uvF9pqG/2ZLCzwurY6N/Ix7Boxn8TKBVYXTutvNHYl4apSn3nvoKyhD7NvHafDzDkVUGq6kQNJIFN7jEkvwZIIXWG8hA82wTWiLWFdfxxF9T/XUsYUckx1grsroMH56y7E8qdzGH7ldAyv1EN70tohfxQsVgHxAdz4l19urNMBu1IdgoPLOM=" # DOCKER_PASS
     - COMMIT=${TRAVIS_COMMIT::8}
 
-after_success:
-  - curl -O -L https://github.com/grammarly/rocker/releases/download/1.0.1/rocker-1.0.1_linux_amd64.tar.gz
-  - tar xvfz rocker-1.0.1_linux_amd64.tar.gz
-  - ./rocker build -var TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER -var COMMIT=$COMMIT --push --auth $DOCKER_USER:$DOCKER_PASS
+before_deploy:
+    - curl -L https://github.com/grammarly/rocker/releases/download/1.0.1/rocker-1.0.1_linux_amd64.tar.gz | tar xfz - -C $HOME
+
+deploy:
+  provider: script
+  script: $HOME/rocker build -var TRAVIS_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER -var COMMIT=$COMMIT --push --auth $DOCKER_USER:$DOCKER_PASS
+  on:
+    branch: master
+    go: 1.5
+    repo: sebest-blog/webapp-go

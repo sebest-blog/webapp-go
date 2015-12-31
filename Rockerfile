@@ -6,13 +6,13 @@ MOUNT .:/go
 WORKDIR /go
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 RUN go build -a -installsuffix cgo -o /webapp main.go
-RUN tar cfz export.tar.gz /webapp
+EXPORT /webapp
 
 ################################################################################
 # Run image
 FROM scratch
 
-ADD export.tar.gz /
+IMPORT /webapp /
 EXPOSE 8000
 CMD ["/webapp"]
 
