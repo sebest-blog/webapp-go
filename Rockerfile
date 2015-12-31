@@ -17,5 +17,5 @@ EXPOSE 8000
 CMD ["/webapp"]
 
 PUSH sebestblog/webapp-go:latest
-PUSH sebestblog/webapp-go:{{ .TRAVIS_BUILD_NUMBER }}
+PUSH sebestblog/webapp-go:travis-{{ .TRAVIS_BUILD_NUMBER }}
 PUSH sebestblog/webapp-go:{{ .COMMIT }}
